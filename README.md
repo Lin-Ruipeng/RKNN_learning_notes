@@ -83,4 +83,5 @@ python demo.py &> log.txt
 
 ## 日志内容分析
 
-待补充
+请阅读doc/Log-analysis.md
+
