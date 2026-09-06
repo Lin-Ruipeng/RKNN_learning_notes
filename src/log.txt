@@ -1,0 +1,642 @@
+I rknn-toolkit2 version: 2.3.2
+[1;33mW[0m [1;33mload_onnx: If you don't need to crop the model, don't set 'inputs'/'input_size_list'/'outputs'![0m
+step 1. 创建RKNN实例
+step 2. 配置模型 (归一化参数和模型文件有关)
+step 3. 载入模型文件 (需要设置输入形状)
+I Loading :   0%|                                                           | 0/177 [00:00<?, ?it/s]I Loading : 100%|██████████████████████████████████████████████| 177/177 [00:00<00:00, 63850.68it/s]
+D base_optimize ...
+D base_optimize done.
+D 
+D fold_constant ...
+D fold_constant done.
+D fold_constant remove nodes = ['Concat_102', 'Unsqueeze_101', 'Gather_100', 'Shape_98']
+D Fixed the shape information of some tensor!
+D 
+D correct_ops ...
+D correct_ops done.
+D 
+D fuse_ops ...
+D fuse_ops results:
+D     convert_global_avgpool_to_conv: remove node = ['GlobalAveragePool_97'], add node = ['GlobalAveragePool_97_2conv0']
+D     convert_gemm_by_exmatmul: remove node = ['Gemm_104'], add node = ['472_tp', '472_tp_rs', 'Gemm_104#1', 'output_mm_tp', 'output_mm_tp_rs']
+D     unsqueeze_to_4d_transpose: remove node = [], add node = ['472_rs', '472_tp-rs']
+D     bypass_two_reshape: remove node = ['472_rs', 'Reshape_103']
+D     fuse_transpose_reshape: remove node = ['472_tp', 'output_mm_tp']
+D     bypass_two_reshape: remove node = ['472_tp_rs', '472_tp-rs']
+D     convert_exmatmul_to_conv: remove node = ['Gemm_104#1'], add node = ['Gemm_104#2']
+D     fold_constant ...
+D     fold_constant done.
+D fuse_ops done.
+D 
+[1;33mW[0m [1;33mbuild: found outlier value, this may affect quantization accuracy
+                        const nameabs_mean    abs_std     outlier value
+                        478      0.89        1.59        -15.073     
+                        550      0.61        0.68        11.299      
+                        577      0.64        0.65        -9.877      
+                        604      0.60        0.55        -9.970      [0m
+D sparse_weight ...
+D sparse_weight done.
+D 
+step 4. 构建模型 (可以设置是否进行INT8量化)
+I GraphPreparing :   0%|                                                    | 0/100 [00:00<?, ?it/s]I GraphPreparing : 100%|████████████████████████████████████████| 100/100 [00:00<00:00, 9523.63it/s]
+I Quantizating :   0%|                                                      | 0/100 [00:00<?, ?it/s]I Quantizating :   3%|█▍                                            | 3/100 [00:00<00:03, 27.41it/s]I Quantizating :   8%|███▋                                          | 8/100 [00:00<00:02, 36.81it/s]I Quantizating :  19%|████████▌                                    | 19/100 [00:00<00:01, 66.92it/s]I Quantizating :  54%|███████████████████████▊                    | 54/100 [00:00<00:00, 172.51it/s]I Quantizating :  87%|██████████████████████████████████████▎     | 87/100 [00:00<00:00, 223.07it/s]I Quantizating : 100%|███████████████████████████████████████████| 100/100 [00:00<00:00, 164.32it/s]
+D 
+D quant_optimizer ...
+D quant_optimizer results:
+D     adjust_relu: ['Clip_96', 'Clip_93', 'Clip_91', 'Clip_87', 'Clip_85', 'Clip_81', 'Clip_79', 'Clip_76', 'Clip_74', 'Clip_70', 'Clip_68', 'Clip_64', 'Clip_62', 'Clip_59', 'Clip_57', 'Clip_53', 'Clip_51', 'Clip_47', 'Clip_45', 'Clip_41', 'Clip_39', 'Clip_36', 'Clip_34', 'Clip_30', 'Clip_28', 'Clip_24', 'Clip_22', 'Clip_19', 'Clip_17', 'Clip_13', 'Clip_11', 'Clip_8', 'Clip_6', 'Clip_3', 'Clip_1']
+D quant_optimizer done.
+D 
+[1;33mW[0m [1;33mbuild: The default input dtype of 'input' is changed from 'float32' to 'int8' in rknn model for performance!
+                       Please take care of this change when deploy rknn model with Runtime API![0m
+[1;33mW[0m [1;33mbuild: The default output dtype of 'output' is changed from 'float32' to 'int8' in rknn model for performance!
+                      Please take care of this change when deploy rknn model with Runtime API![0m
+I rknn building ...
+I RKNN: [14:12:05.484] compress = 0, conv_eltwise_activation_fuse = 1, global_fuse = 1, multi-core-model-mode = 7, output_optimize = 1, layout_match = 1, enable_argb_group = 0, op_group_sram_opt = 0, enable_flash_attention = 0, op_group_nbuf_opt = 0, safe_fuse = 0
+I RKNN: librknnc version: 2.3.2 (e045de294f@2025-04-07T19:48:25)
+D RKNN: [14:12:05.508] RKNN is invoked
+D RKNN: [14:12:05.580] >>>>>> start: rknn::RKNNExtractCustomOpAttrs
+D RKNN: [14:12:05.580] <<<<<<<< end: rknn::RKNNExtractCustomOpAttrs
+D RKNN: [14:12:05.580] >>>>>> start: rknn::RKNNSetOpTargetPass
+D RKNN: [14:12:05.580] <<<<<<<< end: rknn::RKNNSetOpTargetPass
+D RKNN: [14:12:05.580] >>>>>> start: rknn::RKNNBindNorm
+D RKNN: [14:12:05.580] <<<<<<<< end: rknn::RKNNBindNorm
+D RKNN: [14:12:05.580] >>>>>> start: rknn::RKNNEliminateQATDataConvert
+D RKNN: [14:12:05.580] <<<<<<<< end: rknn::RKNNEliminateQATDataConvert
+D RKNN: [14:12:05.580] >>>>>> start: rknn::RKNNConvStrideFixPass
+D RKNN: [14:12:05.581] <<<<<<<< end: rknn::RKNNConvStrideFixPass
+D RKNN: [14:12:05.581] >>>>>> start: rknn::RKNNTileGroupConv
+D RKNN: [14:12:05.581] <<<<<<<< end: rknn::RKNNTileGroupConv
+D RKNN: [14:12:05.581] >>>>>> start: rknn::RKNNAddConvBias
+D RKNN: [14:12:05.581] <<<<<<<< end: rknn::RKNNAddConvBias
+D RKNN: [14:12:05.581] >>>>>> start: rknn::RKNNTileChannel
+D RKNN: [14:12:05.581] <<<<<<<< end: rknn::RKNNTileChannel
+D RKNN: [14:12:05.581] >>>>>> start: rknn::RKNNDuplicateWeightPass
+D RKNN: [14:12:05.581] <<<<<<<< end: rknn::RKNNDuplicateWeightPass
+D RKNN: [14:12:05.581] >>>>>> start: rknn::RKNNInitRNNConst
+D RKNN: [14:12:05.581] <<<<<<<< end: rknn::RKNNInitRNNConst
+D RKNN: [14:12:05.581] >>>>>> start: rknn::RKNNPerChannelPrep
+D RKNN: [14:12:05.581] <<<<<<<< end: rknn::RKNNPerChannelPrep
+D RKNN: [14:12:05.581] >>>>>> start: rknn::RKNNBnQuant
+D RKNN: [14:12:05.581] <<<<<<<< end: rknn::RKNNBnQuant
+D RKNN: [14:12:05.581] >>>>>> start: rknn::RKNNFuseOptimizerPass
+D RKNN: [14:12:05.590] <<<<<<<< end: rknn::RKNNFuseOptimizerPass
+D RKNN: [14:12:05.590] >>>>>> start: rknn::RKNNTurnAutoPad
+D RKNN: [14:12:05.590] <<<<<<<< end: rknn::RKNNTurnAutoPad
+D RKNN: [14:12:05.590] >>>>>> start: rknn::RKNNInitCastConst
+D RKNN: [14:12:05.590] <<<<<<<< end: rknn::RKNNInitCastConst
+D RKNN: [14:12:05.590] >>>>>> start: rknn::RKNNMultiSurfacePass
+D RKNN: [14:12:05.590] <<<<<<<< end: rknn::RKNNMultiSurfacePass
+D RKNN: [14:12:05.590] >>>>>> start: rknn::RKNNReplaceConstantTensorPass
+D RKNN: [14:12:05.590] <<<<<<<< end: rknn::RKNNReplaceConstantTensorPass
+D RKNN: [14:12:05.590] >>>>>> start: rknn::RKNNSubgraphManager
+D RKNN: [14:12:05.590] <<<<<<<< end: rknn::RKNNSubgraphManager
+D RKNN: [14:12:05.590] >>>>>> start: OpEmit
+D RKNN: [14:12:05.590] <<<<<<<< end: OpEmit
+D RKNN: [14:12:05.590] >>>>>> start: rknn::RKNNAddFirstConv
+D RKNN: [14:12:05.590] <<<<<<<< end: rknn::RKNNAddFirstConv
+D RKNN: [14:12:05.590] >>>>>> start: rknn::RKNNTilingPass
+D RKNN: [14:12:05.591] <<<<<<<< end: rknn::RKNNTilingPass
+D RKNN: [14:12:05.591] >>>>>> start: rknn::RKNNLayoutMatchPass
+D RKNN: [14:12:05.591] <<<<<<<< end: rknn::RKNNLayoutMatchPass
+D RKNN: [14:12:05.591] >>>>>> start: rknn::RKNNAddSecondaryNode
+D RKNN: [14:12:05.591] <<<<<<<< end: rknn::RKNNAddSecondaryNode
+D RKNN: [14:12:05.591] >>>>>> start: rknn::RKNNAllocateConvCachePass
+D RKNN: [14:12:05.591] <<<<<<<< end: rknn::RKNNAllocateConvCachePass
+D RKNN: [14:12:05.591] >>>>>> start: OpEmit
+D RKNN: [14:12:05.594] <<<<<<<< end: OpEmit
+D RKNN: [14:12:05.594] >>>>>> start: rknn::RKNNSubGraphMemoryPlanPass
+D RKNN: [14:12:05.594] <<<<<<<< end: rknn::RKNNSubGraphMemoryPlanPass
+D RKNN: [14:12:05.594] >>>>>> start: rknn::RKNNProfileAnalysisPass
+D RKNN: [14:12:05.594] <<<<<<<< end: rknn::RKNNProfileAnalysisPass
+D RKNN: [14:12:05.595] >>>>>> start: rknn::RKNNOperatorIdGenPass
+D RKNN: [14:12:05.595] <<<<<<<< end: rknn::RKNNOperatorIdGenPass
+D RKNN: [14:12:05.595] >>>>>> start: rknn::RKNNWeightTransposePass
+D RKNN: [14:12:05.663] <<<<<<<< end: rknn::RKNNWeightTransposePass
+D RKNN: [14:12:05.663] >>>>>> start: rknn::RKNNCPUWeightTransposePass
+D RKNN: [14:12:05.663] <<<<<<<< end: rknn::RKNNCPUWeiE RKNN: [14:12:05.670] Unkown op target: 0
+ghtTransposePass
+D RKNN: [14:12:05.663] >>>>>> start: rknn::RKNNModelBuildPass
+D RKNN: [14:12:05.670] <<<<<<<< end: rknn::RKNNModelBuildPass
+D RKNN: [14:12:05.670] >>>>>> start: rknn::RKNNModelRegCmdbuildPass
+D RKNN: [14:12:05.673] --------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+D RKNN: [14:12:05.673]                                                         Network Layer Information Table                                                      
+D RKNN: [14:12:05.673] --------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+D RKNN: [14:12:05.673] ID   OpType             DataType Target InputShape                               OutputShape            Cycles(DDR/NPU/Total)    RW(KB)       FullName        
+D RKNN: [14:12:05.673] --------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+D RKNN: [14:12:05.673] 0    InputOperator      INT8     CPU    \                                        (1,3,224,224)          0/0/0                    0            InputOperator:input
+D RKNN: [14:12:05.673] 1    ConvClip           INT8     NPU    (1,3,224,224),(32,3,3,3),(32)            (1,32,112,112)         23540/112896/112896      151          Conv:Conv_0     
+D RKNN: [14:12:05.673] 2    ConvClip           INT8     NPU    (1,32,112,112),(1,32,3,3),(32)           (1,32,112,112)         33974/112896/112896      392          Conv:Conv_2     
+D RKNN: [14:12:05.673] 3    Conv               INT8     NPU    (1,32,112,112),(16,32,1,1),(16)          (1,16,112,112)         25488/50176/50176        392          Conv:Conv_4     
+D RKNN: [14:12:05.673] 4    ConvClip           INT8     NPU    (1,16,112,112),(96,16,1,1),(96)          (1,96,112,112)         59493/150528/150528      198          Conv:Conv_5     
+D RKNN: [14:12:05.673] 5    ConvClip           INT8     NPU    (1,96,112,112),(1,96,3,3),(96)           (1,96,56,56)           63718/56448/63718        1177         Conv:Conv_7     
+D RKNN: [14:12:05.673] 6    Conv               INT8     NPU    (1,96,56,56),(24,96,1,1),(24)            (1,24,56,56)           17079/12544/17079        296          Conv:Conv_9     
+D RKNN: [14:12:05.673] 7    ConvClip           INT8     NPU    (1,24,56,56),(144,24,1,1),(144)          (1,144,56,56)          23534/62720/62720        102          Conv:Conv_10    
+D RKNN: [14:12:05.673] 8    ConvClip           INT8     NPU    (1,144,56,56),(1,144,3,3),(144)          (1,144,56,56)          38303/84672/84672        443          Conv:Conv_12    
+D RKNN: [14:12:05.673] 9    ConvAdd            INT8     NPU    (1,144,56,56),(24,144,1,1),(24),...      (1,24,56,56)           27734/15680/27734        542          Conv:Conv_14_ConvAdd
+D RKNN: [14:12:05.673] 10   ConvClip           INT8     NPU    (1,24,56,56),(144,24,1,1),(144)          (1,144,56,56)          23534/62720/62720        102          Conv:Conv_16    
+D RKNN: [14:12:05.673] 11   ConvClip           INT8     NPU    (1,144,56,56),(1,144,3,3),(144)          (1,144,28,28)          23984/21168/23984        443          Conv:Conv_18    
+D RKNN: [14:12:05.673] 12   Conv               INT8     NPU    (1,144,28,28),(32,144,1,1),(32)          (1,32,28,28)           6040/3920/6040           115          Conv:Conv_20    
+D RKNN: [14:12:05.673] 13   ConvClip           INT8     NPU    (1,32,28,28),(192,32,1,1),(192)          (1,192,28,28)          7750/18816/18816         32           Conv:Conv_21    
+D RKNN: [14:12:05.673] 14   ConvClip           INT8     NPU    (1,192,28,28),(1,192,3,3),(192)          (1,192,28,28)          12866/21168/21168        150          Conv:Conv_23    
+D RKNN: [14:12:05.673] 15   ConvAdd            INT8     NPU    (1,192,28,28),(32,192,1,1),(32),...      (1,32,28,28)           8756/4704/8756           177          Conv:Conv_25_ConvAdd
+D RKNN: [14:12:05.673] 16   ConvClip           INT8     NPU    (1,32,28,28),(192,32,1,1),(192)          (1,192,28,28)          7750/18816/18816         32           Conv:Conv_27    
+D RKNN: [14:12:05.673] 17   ConvClip           INT8     NPU    (1,192,28,28),(1,192,3,3),(192)          (1,192,28,28)          12866/21168/21168        150          Conv:Conv_29    
+D RKNN: [14:12:05.673] 18   ConvAdd            INT8     NPU    (1,192,28,28),(32,192,1,1),(32),...      (1,32,28,28)           8756/4704/8756           177          Conv:Conv_31_ConvAdd
+D RKNN: [14:12:05.673] 19   ConvClip           INT8     NPU    (1,32,28,28),(192,32,1,1),(192)          (1,192,28,28)          7750/18816/18816         32           Conv:Conv_33    
+D RKNN: [14:12:05.673] 20   ConvClip           INT8     NPU    (1,192,28,28),(1,192,3,3),(192)          (1,192,14,14)          8093/5616/8093           150          Conv:Conv_35    
+D RKNN: [14:12:05.673] 21   Conv               INT8     NPU    (1,192,14,14),(64,192,1,1),(64)          (1,64,14,14)           2663/2496/2663           49           Conv:Conv_37    
+D RKNN: [14:12:05.673] 22   ConvClip           INT8     NPU    (1,64,14,14),(384,64,1,1),(384)          (1,384,14,14)          4882/9984/9984           39           Conv:Conv_38    
+D RKNN: [14:12:05.673] 23   ConvClip           INT8     NPU    (1,384,14,14),(1,384,3,3),(384)          (1,384,14,14)          6640/11232/11232         79           Conv:Conv_40    
+D RKNN: [14:12:05.673] 24   ConvAdd            INT8     NPU    (1,384,14,14),(64,384,1,1),(64),...      (1,64,14,14)           5304/4992/5304           110          Conv:Conv_42_ConvAdd
+D RKNN: [14:12:05.673] 25   ConvClip           INT8     NPU    (1,64,14,14),(384,64,1,1),(384)          (1,384,14,14)          4882/9984/9984           39           Conv:Conv_44    
+D RKNN: [14:12:05.673] 26   ConvClip           INT8     NPU    (1,384,14,14),(1,384,3,3),(384)          (1,384,14,14)          6640/11232/11232         79           Conv:Conv_46    
+D RKNN: [14:12:05.673] 27   ConvAdd            INT8     NPU    (1,384,14,14),(64,384,1,1),(64),...      (1,64,14,14)           5304/4992/5304           110          Conv:Conv_48_ConvAdd
+D RKNN: [14:12:05.673] 28   ConvClip           INT8     NPU    (1,64,14,14),(384,64,1,1),(384)          (1,384,14,14)          4882/9984/9984           39           Conv:Conv_50    
+D RKNN: [14:12:05.673] 29   ConvClip           INT8     NPU    (1,384,14,14),(1,384,3,3),(384)          (1,384,14,14)          6640/11232/11232         79           Conv:Conv_52    
+D RKNN: [14:12:05.673] 30   ConvAdd            INT8     NPU    (1,384,14,14),(64,384,1,1),(64),...      (1,64,14,14)           5304/4992/5304           110          Conv:Conv_54_ConvAdd
+D RKNN: [14:12:05.673] 31   ConvClip           INT8     NPU    (1,64,14,14),(384,64,1,1),(384)          (1,384,14,14)          4882/9984/9984           39           Conv:Conv_56    
+D RKNN: [14:12:05.673] 32   ConvClip           INT8     NPU    (1,384,14,14),(1,384,3,3),(384)          (1,384,14,14)          6640/11232/11232         79           Conv:Conv_58    
+D RKNN: [14:12:05.673] 33   Conv               INT8     NPU    (1,384,14,14),(96,384,1,1),(96)          (1,96,14,14)           5569/7488/7488           110          Conv:Conv_60    
+D RKNN: [14:12:05.673] 34   ConvClip           INT8     NPU    (1,96,14,14),(576,96,1,1),(576)          (1,576,14,14)          8101/14976/14976         76           Conv:Conv_61    
+D RKNN: [14:12:05.673] 35   ConvClip           INT8     NPU    (1,576,14,14),(1,576,3,3),(576)          (1,576,14,14)          9960/16848/16848         119          Conv:Conv_63    
+D RKNN: [14:12:05.673] 36   ConvAdd            INT8     NPU    (1,576,14,14),(96,576,1,1),(96),...      (1,96,14,14)           8734/11232/11232         183          Conv:Conv_65_ConvAdd
+D RKNN: [14:12:05.673] 37   ConvClip           INT8     NPU    (1,96,14,14),(576,96,1,1),(576)          (1,576,14,14)          8101/14976/14976         76           Conv:Conv_67    
+D RKNN: [14:12:05.673] 38   ConvClip           INT8     NPU    (1,576,14,14),(1,576,3,3),(576)          (1,576,14,14)          9960/16848/16848         119          Conv:Conv_69    
+D RKNN: [14:12:05.673] 39   ConvAdd            INT8     NPU    (1,576,14,14),(96,576,1,1),(96),...      (1,96,14,14)           8734/11232/11232         183          Conv:Conv_71_ConvAdd
+D RKNN: [14:12:05.673] 40   ConvClip           INT8     NPU    (1,96,14,14),(576,96,1,1),(576)          (1,576,14,14)          8101/14976/14976         76           Conv:Conv_73    
+D RKNN: [14:12:05.673] 41   ConvClip           INT8     NPU    (1,576,14,14),(1,576,3,3),(576)          (1,576,7,7)            6380/5184/6380           119          Conv:Conv_75    
+D RKNN: [14:12:05.673] 42   Conv               INT8     NPU    (1,576,7,7),(160,576,1,1),(160)          (1,160,7,7)            5475/5760/5760           118          Conv:Conv_77    
+D RKNN: [14:12:05.673] 43   ConvClip           INT8     NPU    (1,160,7,7),(960,160,1,1),(960)          (1,960,7,7)            9139/9600/9600           165          Conv:Conv_78    
+D RKNN: [14:12:05.673] 44   ConvClip           INT8     NPU    (1,960,7,7),(1,960,3,3),(960)            (1,960,7,7)            4668/8640/8640           61           Conv:Conv_80    
+D RKNN: [14:12:05.673] 45   ConvAdd            INT8     NPU    (1,960,7,7),(160,960,1,1),(160),...      (1,160,7,7)            9200/9600/9600           204          Conv:Conv_82_ConvAdd
+D RKNN: [14:12:05.673] 46   ConvClip           INT8     NPU    (1,160,7,7),(960,160,1,1),(960)          (1,960,7,7)            9139/9600/9600           165          Conv:Conv_84    
+D RKNN: [14:12:05.673] 47   ConvClip           INT8     NPU    (1,960,7,7),(1,960,3,3),(960)            (1,960,7,7)            4668/8640/8640           61           Conv:Conv_86    
+D RKNN: [14:12:05.673] 48   ConvAdd            INT8     NPU    (1,960,7,7),(160,960,1,1),(160),...      (1,160,7,7)            9200/9600/9600           204          Conv:Conv_88_ConvAdd
+D RKNN: [14:12:05.673] 49   ConvClip           INT8     NPU    (1,160,7,7),(960,160,1,1),(960)          (1,960,7,7)            9139/9600/9600           165          Conv:Conv_90    
+D RKNN: [14:12:05.673] 50   ConvClip           INT8     NPU    (1,960,7,7),(1,960,3,3),(960)            (1,960,7,7)            4668/8640/8640           61           Conv:Conv_92    
+D RKNN: [14:12:05.673] 51   Conv               INT8     NPU    (1,960,7,7),(320,960,1,1),(320)          (1,320,7,7)            15748/19200/19200        348          Conv:Conv_94    
+D RKNN: [14:12:05.673] 52   ConvClip           INT8     NPU    (1,320,7,7),(1280,320,1,1),(1280)        (1,1280,7,7)           21064/25600/25600        425          Conv:Conv_95    
+D RKNN: [14:12:05.673] 53   Conv               INT8     NPU    (1,1280,7,7),(1,1280,7,7),(1280)         (1,1280,1,1)           5791/15680/15680         132          Conv:GlobalAveragePool_97_2conv0
+D RKNN: [14:12:05.673] 54   Conv               INT8     NPU    (1,1280,1,1),(1000,1280,1,1),(1000)      (1,1000,1,1)           54557/20480/54557        1259         Conv:Gemm_104#2 
+D RKNN: [14:12:05.673] 55   Reshape            INT8     CPU    (1,1000,1,1),(2)                         (1,1000)               0/0/0                    1            Reshape:output_mm_tp_rs
+D RKNN: [14:12:05.673] 56   OutputOperator     INT8     CPU    (1,1000)                                 \                      0/0/0                    0            OutputOperator:output
+D RKNN: [14:12:05.673] --------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+D RKNN: [14:12:05.673] <<<<<<<< end: rknn::RKNNModelRegCmdbuildPass
+D RKNN: [14:12:05.673] >>>>>> start: rknn::RKNNModelExportPass
+D RKNN: [14:12:05.673] Export RKNN model to /tmp/tmp5o9ov7wm/check.rknn
+D RKNN: [14:12:05.682] <<<<<<<< end: rknn::RKNNModelExportPass
+D RKNN: [14:12:05.682] >>>>>> start: rknn::RKNNMemStatisticsPass
+D RKNN: [14:12:05.682] ----------------------------------------------------------------------------------------------------------------------------------
+D RKNN: [14:12:05.682]                                            Feature Tensor Information Table                                 
+D RKNN: [14:12:05.682] ------------------------------------------------------------------------------------------------+---------------------------------
+D RKNN: [14:12:05.682] ID  User           Tensor                DataType  DataFormat   OrigShape      NativeShape      |     [Start       End)       Size
+D RKNN: [14:12:05.682] ------------------------------------------------------------------------------------------------+---------------------------------
+D RKNN: [14:12:05.682] 1   ConvClip       input                 INT8      NC1HWC2      (1,3,224,224)  (1,1,224,224,3)  | 0x00000000 0x00024c00 0x00024c00
+D RKNN: [14:12:05.682] 2   ConvClip       317                   INT8      NC1HWC2      (1,32,112,112) (1,2,112,112,16) | 0x00024c00 0x00086c00 0x00062000
+D RKNN: [14:12:05.682] 3   Conv           320                   INT8      NC1HWC2      (1,32,112,112) (1,4,112,112,16) | 0x00086c00 0x0014ac00 0x000c4000
+D RKNN: [14:12:05.682] 4   ConvClip       480                   INT8      NC1HWC2      (1,16,112,112) (1,2,112,112,16) | 0x00000000 0x00062000 0x00062000
+D RKNN: [14:12:05.682] 5   ConvClip       325                   INT8      NC1HWC2      (1,96,112,112) (1,6,112,112,16) | 0x00062000*0x00188000 0x00126000
+D RKNN: [14:12:05.682] 6   Conv           328                   INT8      NC1HWC2      (1,96,56,56)   (1,8,56,56,16)   | 0x00000000 0x00062000 0x00062000
+D RKNN: [14:12:05.682] 7   ConvClip       489                   INT8      NC1HWC2      (1,24,56,56)   (1,2,56,56,16)   | 0x00062000 0x0007a800 0x00018800
+D RKNN: [14:12:05.682] 8   ConvClip       333                   INT8      NC1HWC2      (1,144,56,56)  (1,10,56,56,16)  | 0x0007a800 0x000f5000 0x0007a800
+D RKNN: [14:12:05.682] 9   ConvAdd        336                   INT8      NC1HWC2      (1,144,56,56)  (1,12,56,56,16)  | 0x000f5000*0x00188000 0x00093000
+D RKNN: [14:12:05.682] 9   ConvAdd        489                   INT8      NC1HWC2      (1,24,56,56)   (1,2,56,56,16)   | 0x00062000 0x0007a800 0x00018800
+D RKNN: [14:12:05.682] 10  ConvClip       339                   INT8      NC1HWC2      (1,24,56,56)   (1,2,56,56,16)   | 0x00000000 0x00018800 0x00018800
+D RKNN: [14:12:05.682] 11  ConvClip       342                   INT8      NC1HWC2      (1,144,56,56)  (1,10,56,56,16)  | 0x00018800 0x00093000 0x0007a800
+D RKNN: [14:12:05.682] 12  Conv           345                   INT8      NC1HWC2      (1,144,28,28)  (1,12,28,28,16)  | 0x00093000 0x000b7c00 0x00024c00
+D RKNN: [14:12:05.682] 13  ConvClip       507                   INT8      NC1HWC2      (1,32,28,28)   (1,2,28,28,16)   | 0x00000000 0x00006200 0x00006200
+D RKNN: [14:12:05.682] 14  ConvClip       350                   INT8      NC1HWC2      (1,192,28,28)  (1,12,28,28,16)  | 0x00006200 0x0002ae00 0x00024c00
+D RKNN: [14:12:05.682] 15  ConvAdd        353                   INT8      NC1HWC2      (1,192,28,28)  (1,12,28,28,16)  | 0x0002ae00 0x0004fa00 0x00024c00
+D RKNN: [14:12:05.682] 15  ConvAdd        507                   INT8      NC1HWC2      (1,32,28,28)   (1,2,28,28,16)   | 0x00000000 0x00006200 0x00006200
+D RKNN: [14:12:05.682] 16  ConvClip       356                   INT8      NC1HWC2      (1,32,28,28)   (1,2,28,28,16)   | 0x00006200 0x0000c400 0x00006200
+D RKNN: [14:12:05.682] 17  ConvClip       359                   INT8      NC1HWC2      (1,192,28,28)  (1,12,28,28,16)  | 0x0000c400 0x00031000 0x00024c00
+D RKNN: [14:12:05.682] 18  ConvAdd        362                   INT8      NC1HWC2      (1,192,28,28)  (1,12,28,28,16)  | 0x00031000 0x00055c00 0x00024c00
+D RKNN: [14:12:05.682] 18  ConvAdd        356                   INT8      NC1HWC2      (1,32,28,28)   (1,2,28,28,16)   | 0x00006200 0x0000c400 0x00006200
+D RKNN: [14:12:05.682] 19  ConvClip       365                   INT8      NC1HWC2      (1,32,28,28)   (1,2,28,28,16)   | 0x00000000 0x00006200 0x00006200
+D RKNN: [14:12:05.682] 20  ConvClip       368                   INT8      NC1HWC2      (1,192,28,28)  (1,12,28,28,16)  | 0x00006200 0x0002ae00 0x00024c00
+D RKNN: [14:12:05.682] 21  Conv           371                   INT8      NC1HWC2      (1,192,14,14)  (1,12,14,14,16)  | 0x0002ae00 0x00034100 0x00009300
+D RKNN: [14:12:05.682] 22  ConvClip       534                   INT8      NC1HWC2      (1,64,14,14)   (1,4,14,14,16)   | 0x00000000 0x00003100 0x00003100
+D RKNN: [14:12:05.682] 23  ConvClip       376                   INT8      NC1HWC2      (1,384,14,14)  (1,24,14,14,16)  | 0x00003100 0x00015700 0x00012600
+D RKNN: [14:12:05.682] 24  ConvAdd        379                   INT8      NC1HWC2      (1,384,14,14)  (1,24,14,14,16)  | 0x00015700 0x00027d00 0x00012600
+D RKNN: [14:12:05.682] 24  ConvAdd        534                   INT8      NC1HWC2      (1,64,14,14)   (1,4,14,14,16)   | 0x00000000 0x00003100 0x00003100
+D RKNN: [14:12:05.682] 25  ConvClip       382                   INT8      NC1HWC2      (1,64,14,14)   (1,4,14,14,16)   | 0x00003100 0x00006200 0x00003100
+D RKNN: [14:12:05.682] 26  ConvClip       385                   INT8      NC1HWC2      (1,384,14,14)  (1,24,14,14,16)  | 0x00006200 0x00018800 0x00012600
+D RKNN: [14:12:05.682] 27  ConvAdd        388                   INT8      NC1HWC2      (1,384,14,14)  (1,24,14,14,16)  | 0x00018800 0x0002ae00 0x00012600
+D RKNN: [14:12:05.682] 27  ConvAdd        382                   INT8      NC1HWC2      (1,64,14,14)   (1,4,14,14,16)   | 0x00003100 0x00006200 0x00003100
+D RKNN: [14:12:05.682] 28  ConvClip       391                   INT8      NC1HWC2      (1,64,14,14)   (1,4,14,14,16)   | 0x00000000 0x00003100 0x00003100
+D RKNN: [14:12:05.682] 29  ConvClip       394                   INT8      NC1HWC2      (1,384,14,14)  (1,24,14,14,16)  | 0x00003100 0x00015700 0x00012600
+D RKNN: [14:12:05.682] 30  ConvAdd        397                   INT8      NC1HWC2      (1,384,14,14)  (1,24,14,14,16)  | 0x00015700 0x00027d00 0x00012600
+D RKNN: [14:12:05.682] 30  ConvAdd        391                   INT8      NC1HWC2      (1,64,14,14)   (1,4,14,14,16)   | 0x00000000 0x00003100 0x00003100
+D RKNN: [14:12:05.682] 31  ConvClip       400                   INT8      NC1HWC2      (1,64,14,14)   (1,4,14,14,16)   | 0x00003100 0x00006200 0x00003100
+D RKNN: [14:12:05.682] 32  ConvClip       403                   INT8      NC1HWC2      (1,384,14,14)  (1,24,14,14,16)  | 0x00006200 0x00018800 0x00012600
+D RKNN: [14:12:05.682] 33  Conv           406                   INT8      NC1HWC2      (1,384,14,14)  (1,24,14,14,16)  | 0x00018800 0x0002ae00 0x00012600
+D RKNN: [14:12:05.682] 34  ConvClip       570                   INT8      NC1HWC2      (1,96,14,14)   (1,6,14,14,16)   | 0x00000000 0x00004980 0x00004980
+D RKNN: [14:12:05.682] 35  ConvClip       411                   INT8      NC1HWC2      (1,576,14,14)  (1,36,14,14,16)  | 0x00004980 0x00020280 0x0001b900
+D RKNN: [14:12:05.682] 36  ConvAdd        414                   INT8      NC1HWC2      (1,576,14,14)  (1,36,14,14,16)  | 0x00020280 0x0003bb80 0x0001b900
+D RKNN: [14:12:05.682] 36  ConvAdd        570                   INT8      NC1HWC2      (1,96,14,14)   (1,6,14,14,16)   | 0x00000000 0x00004980 0x00004980
+D RKNN: [14:12:05.682] 37  ConvClip       417                   INT8      NC1HWC2      (1,96,14,14)   (1,6,14,14,16)   | 0x00004980 0x00009300 0x00004980
+D RKNN: [14:12:05.682] 38  ConvClip       420                   INT8      NC1HWC2      (1,576,14,14)  (1,36,14,14,16)  | 0x00009300 0x00024c00 0x0001b900
+D RKNN: [14:12:05.682] 39  ConvAdd        423                   INT8      NC1HWC2      (1,576,14,14)  (1,36,14,14,16)  | 0x00024c00 0x00040500 0x0001b900
+D RKNN: [14:12:05.682] 39  ConvAdd        417                   INT8      NC1HWC2      (1,96,14,14)   (1,6,14,14,16)   | 0x00004980 0x00009300 0x00004980
+D RKNN: [14:12:05.682] 40  ConvClip       426                   INT8      NC1HWC2      (1,96,14,14)   (1,6,14,14,16)   | 0x00000000 0x00004980 0x00004980
+D RKNN: [14:12:05.682] 41  ConvClip       429                   INT8      NC1HWC2      (1,576,14,14)  (1,36,14,14,16)  | 0x00004980 0x00020280 0x0001b900
+D RKNN: [14:12:05.682] 42  Conv           432                   INT8      NC1HWC2      (1,576,7,7)    (1,38,7,7,16)    | 0x00020280 0x00027780 0x00007500
+D RKNN: [14:12:05.682] 43  ConvClip       597                   INT8      NC1HWC2      (1,160,7,7)    (1,10,7,7,16)    | 0x00000000 0x00002080 0x00002080
+D RKNN: [14:12:05.682] 44  ConvClip       437                   INT8      NC1HWC2      (1,960,7,7)    (1,63,7,7,16)    | 0x00002080 0x0000e380 0x0000c300
+D RKNN: [14:12:05.682] 45  ConvAdd        440                   INT8      NC1HWC2      (1,960,7,7)    (1,63,7,7,16)    | 0x0000e380 0x0001a680 0x0000c300
+D RKNN: [14:12:05.682] 45  ConvAdd        597                   INT8      NC1HWC2      (1,160,7,7)    (1,10,7,7,16)    | 0x00000000 0x00002080 0x00002080
+D RKNN: [14:12:05.682] 46  ConvClip       443                   INT8      NC1HWC2      (1,160,7,7)    (1,10,7,7,16)    | 0x00002080 0x00004100 0x00002080
+D RKNN: [14:12:05.682] 47  ConvClip       446                   INT8      NC1HWC2      (1,960,7,7)    (1,63,7,7,16)    | 0x00004100 0x00010400 0x0000c300
+D RKNN: [14:12:05.682] 48  ConvAdd        449                   INT8      NC1HWC2      (1,960,7,7)    (1,63,7,7,16)    | 0x00010400 0x0001c700 0x0000c300
+D RKNN: [14:12:05.682] 48  ConvAdd        443                   INT8      NC1HWC2      (1,160,7,7)    (1,10,7,7,16)    | 0x00002080 0x00004100 0x00002080
+D RKNN: [14:12:05.682] 49  ConvClip       452                   INT8      NC1HWC2      (1,160,7,7)    (1,10,7,7,16)    | 0x00000000 0x00002080 0x00002080
+D RKNN: [14:12:05.682] 50  ConvClip       455                   INT8      NC1HWC2      (1,960,7,7)    (1,63,7,7,16)    | 0x00002080 0x0000e380 0x0000c300
+D RKNN: [14:12:05.682] 51  Conv           458                   INT8      NC1HWC2      (1,960,7,7)    (1,63,7,7,16)    | 0x0000e380 0x0001a680 0x0000c300
+D RKNN: [14:12:05.682] 52  ConvClip       624                   INT8      NC1HWC2      (1,320,7,7)    (1,21,7,7,16)    | 0x00000000 0x00004100 0x00004100
+D RKNN: [14:12:05.682] 53  Conv           463                   INT8      NC1HWC2      (1,1280,7,7)   (1,84,7,7,16)    | 0x00004100 0x00014500 0x00010400
+D RKNN: [14:12:05.682] 54  Conv           464                   INT8      NC1HWC2      (1,1280,1,1)   (1,80,1,1,16)    | 0x00000000 0x00000500 0x00000500
+D RKNN: [14:12:05.682] 55  Reshape        output_mm             INT8      NC1HWC2      (1,1000,1,1)   (1,64,1,1,16)    | 0x00000500 0x00000900 0x00000400
+D RKNN: [14:12:05.682] 56  OutputOperator output                INT8      UNDEFINED    (1,1000)       (1,1000)         | 0x00000040 0x00000440 0x00000400
+D RKNN: [14:12:05.682] ------------------------------------------------------------------------------------------------+---------------------------------
+D RKNN: [14:12:05.682] --------------------------------------------------------------------------------------------------------
+D RKNN: [14:12:05.682]                                   Const Tensor Information Table                      
+D RKNN: [14:12:05.682] ----------------------------------------------------------------------+---------------------------------
+D RKNN: [14:12:05.682] ID  User     Tensor                         DataType  OrigShape       |     [Start       End)       Size
+D RKNN: [14:12:05.682] ----------------------------------------------------------------------+---------------------------------
+D RKNN: [14:12:05.682] 1   ConvClip 475                            INT8      (32,3,3,3)      | 0x00000000 0x00001200 0x00001200
+D RKNN: [14:12:05.682] 1   ConvClip 476                            INT32     (32)            | 0x00001200 0x00001300 0x00000100
+D RKNN: [14:12:05.682] 2   ConvClip 478                            INT8      (1,32,3,3)      | 0x00001300 0x00001420 0x00000120
+D RKNN: [14:12:05.682] 2   ConvClip 479                            INT32     (32)            | 0x00001440 0x00001640 0x00000200
+D RKNN: [14:12:05.682] 3   Conv     481                            INT8      (16,32,1,1)     | 0x00001640 0x00001840 0x00000200
+D RKNN: [14:12:05.682] 3   Conv     482                            INT32     (16)            | 0x00001840 0x00001940 0x00000100
+D RKNN: [14:12:05.682] 4   ConvClip 484                            INT8      (96,16,1,1)     | 0x00001940 0x00001f40 0x00000600
+D RKNN: [14:12:05.682] 4   ConvClip 485                            INT32     (96)            | 0x00001f40 0x00002240 0x00000300
+D RKNN: [14:12:05.682] 5   ConvClip 487                            INT8      (1,96,3,3)      | 0x00002240 0x000025a0 0x00000360
+D RKNN: [14:12:05.682] 5   ConvClip 488                            INT32     (96)            | 0x000025c0 0x000029c0 0x00000400
+D RKNN: [14:12:05.682] 6   Conv     490                            INT8      (24,96,1,1)     | 0x000029c0 0x000032c0 0x00000900
+D RKNN: [14:12:05.682] 6   Conv     491                            INT32     (24)            | 0x000032c0 0x000033c0 0x00000100
+D RKNN: [14:12:05.682] 7   ConvClip 493                            INT8      (144,24,1,1)    | 0x000033c0 0x000045c0 0x00001200
+D RKNN: [14:12:05.682] 7   ConvClip 494                            INT32     (144)           | 0x000045c0 0x00004ac0 0x00000500
+D RKNN: [14:12:05.682] 8   ConvClip 496                            INT8      (1,144,3,3)     | 0x00004ac0 0x00004fd0 0x00000510
+D RKNN: [14:12:05.682] 8   ConvClip 497                            INT32     (144)           | 0x00005000 0x00005600 0x00000600
+D RKNN: [14:12:05.682] 9   ConvAdd  499                            INT8      (24,144,1,1)    | 0x00005600 0x00006380 0x00000d80
+D RKNN: [14:12:05.682] 9   ConvAdd  500                            INT32     (24)            | 0x00006380 0x00006480 0x00000100
+D RKNN: [14:12:05.682] 10  ConvClip 502                            INT8      (144,24,1,1)    | 0x00006480 0x00007680 0x00001200
+D RKNN: [14:12:05.682] 10  ConvClip 503                            INT32     (144)           | 0x00007680 0x00007b80 0x00000500
+D RKNN: [14:12:05.682] 11  ConvClip 505                            INT8      (1,144,3,3)     | 0x00007b80 0x00008090 0x00000510
+D RKNN: [14:12:05.682] 11  ConvClip 506                            INT32     (144)           | 0x000080c0 0x000086c0 0x00000600
+D RKNN: [14:12:05.682] 12  Conv     508                            INT8      (32,144,1,1)    | 0x000086c0 0x000098c0 0x00001200
+D RKNN: [14:12:05.682] 12  Conv     509                            INT32     (32)            | 0x000098c0 0x000099c0 0x00000100
+D RKNN: [14:12:05.682] 13  ConvClip 511                            INT8      (192,32,1,1)    | 0x000099c0 0x0000b1c0 0x00001800
+D RKNN: [14:12:05.682] 13  ConvClip 512                            INT32     (192)           | 0x0000b1c0 0x0000b7c0 0x00000600
+D RKNN: [14:12:05.682] 14  ConvClip 514                            INT8      (1,192,3,3)     | 0x0000b7c0 0x0000be80 0x000006c0
+D RKNN: [14:12:05.682] 14  ConvClip 515                            INT32     (192)           | 0x0000be80 0x0000c480 0x00000600
+D RKNN: [14:12:05.682] 15  ConvAdd  517                            INT8      (32,192,1,1)    | 0x0000c480 0x0000dc80 0x00001800
+D RKNN: [14:12:05.682] 15  ConvAdd  518                            INT32     (32)            | 0x0000dc80 0x0000dd80 0x00000100
+D RKNN: [14:12:05.682] 16  ConvClip 520                            INT8      (192,32,1,1)    | 0x0000dd80 0x0000f580 0x00001800
+D RKNN: [14:12:05.682] 16  ConvClip 521                            INT32     (192)           | 0x0000f580 0x0000fb80 0x00000600
+D RKNN: [14:12:05.682] 17  ConvClip 523                            INT8      (1,192,3,3)     | 0x0000fb80 0x00010240 0x000006c0
+D RKNN: [14:12:05.682] 17  ConvClip 524                            INT32     (192)           | 0x00010240 0x00010840 0x00000600
+D RKNN: [14:12:05.682] 18  ConvAdd  526                            INT8      (32,192,1,1)    | 0x00010840 0x00012040 0x00001800
+D RKNN: [14:12:05.682] 18  ConvAdd  527                            INT32     (32)            | 0x00012040 0x00012140 0x00000100
+D RKNN: [14:12:05.682] 19  ConvClip 529                            INT8      (192,32,1,1)    | 0x00012140 0x00013940 0x00001800
+D RKNN: [14:12:05.682] 19  ConvClip 530                            INT32     (192)           | 0x00013940 0x00013f40 0x00000600
+D RKNN: [14:12:05.682] 20  ConvClip 532                            INT8      (1,192,3,3)     | 0x00013f40 0x00014600 0x000006c0
+D RKNN: [14:12:05.682] 20  ConvClip 533                            INT32     (192)           | 0x00014600 0x00014c00 0x00000600
+D RKNN: [14:12:05.682] 21  Conv     535                            INT8      (64,192,1,1)    | 0x00014c00 0x00017c00 0x00003000
+D RKNN: [14:12:05.682] 21  Conv     536                            INT32     (64)            | 0x00017c00 0x00017e00 0x00000200
+D RKNN: [14:12:05.682] 22  ConvClip 538                            INT8      (384,64,1,1)    | 0x00017e00 0x0001de00 0x00006000
+D RKNN: [14:12:05.682] 22  ConvClip 539                            INT32     (384)           | 0x0001de00 0x0001ea00 0x00000c00
+D RKNN: [14:12:05.682] 23  ConvClip 541                            INT8      (1,384,3,3)     | 0x0001ea00 0x0001f780 0x00000d80
+D RKNN: [14:12:05.682] 23  ConvClip 542                            INT32     (384)           | 0x0001f780 0x00020380 0x00000c00
+D RKNN: [14:12:05.682] 24  ConvAdd  544                            INT8      (64,384,1,1)    | 0x00020380 0x00026380 0x00006000
+D RKNN: [14:12:05.682] 24  ConvAdd  545                            INT32     (64)            | 0x00026380 0x00026580 0x00000200
+D RKNN: [14:12:05.682] 25  ConvClip 547                            INT8      (384,64,1,1)    | 0x00026580 0x0002c580 0x00006000
+D RKNN: [14:12:05.682] 25  ConvClip 548                            INT32     (384)           | 0x0002c580 0x0002d180 0x00000c00
+D RKNN: [14:12:05.682] 26  ConvClip 550                            INT8      (1,384,3,3)     | 0x0002d180 0x0002df00 0x00000d80
+D RKNN: [14:12:05.682] 26  ConvClip 551                            INT32     (384)           | 0x0002df00 0x0002eb00 0x00000c00
+D RKNN: [14:12:05.682] 27  ConvAdd  553                            INT8      (64,384,1,1)    | 0x0002eb00 0x00034b00 0x00006000
+D RKNN: [14:12:05.682] 27  ConvAdd  554                            INT32     (64)            | 0x00034b00 0x00034d00 0x00000200
+D RKNN: [14:12:05.682] 28  ConvClip 556                            INT8      (384,64,1,1)    | 0x00034d00 0x0003ad00 0x00006000
+D RKNN: [14:12:05.682] 28  ConvClip 557                            INT32     (384)           | 0x0003ad00 0x0003b900 0x00000c00
+D RKNN: [14:12:05.682] 29  ConvClip 559                            INT8      (1,384,3,3)     | 0x0003b900 0x0003c680 0x00000d80
+D RKNN: [14:12:05.682] 29  ConvClip 560                            INT32     (384)           | 0x0003c680 0x0003d280 0x00000c00
+D RKNN: [14:12:05.682] 30  ConvAdd  562                            INT8      (64,384,1,1)    | 0x0003d280 0x00043280 0x00006000
+D RKNN: [14:12:05.682] 30  ConvAdd  563                            INT32     (64)            | 0x00043280 0x00043480 0x00000200
+D RKNN: [14:12:05.682] 31  ConvClip 565                            INT8      (384,64,1,1)    | 0x00043480 0x00049480 0x00006000
+D RKNN: [14:12:05.682] 31  ConvClip 566                            INT32     (384)           | 0x00049480 0x0004a080 0x00000c00
+D RKNN: [14:12:05.682] 32  ConvClip 568                            INT8      (1,384,3,3)     | 0x0004a080 0x0004ae00 0x00000d80
+D RKNN: [14:12:05.682] 32  ConvClip 569                            INT32     (384)           | 0x0004ae00 0x0004ba00 0x00000c00
+D RKNN: [14:12:05.682] 33  Conv     571                            INT8      (96,384,1,1)    | 0x0004ba00 0x00054a00 0x00009000
+D RKNN: [14:12:05.682] 33  Conv     572                            INT32     (96)            | 0x00054a00 0x00054d00 0x00000300
+D RKNN: [14:12:05.682] 34  ConvClip 574                            INT8      (576,96,1,1)    | 0x00054d00 0x00062500 0x0000d800
+D RKNN: [14:12:05.682] 34  ConvClip 575                            INT32     (576)           | 0x00062500 0x00063700 0x00001200
+D RKNN: [14:12:05.682] 35  ConvClip 577                            INT8      (1,576,3,3)     | 0x00063700 0x00064b40 0x00001440
+D RKNN: [14:12:05.682] 35  ConvClip 578                            INT32     (576)           | 0x00064b40 0x00065d40 0x00001200
+D RKNN: [14:12:05.682] 36  ConvAdd  580                            INT8      (96,576,1,1)    | 0x00065d40 0x00073540 0x0000d800
+D RKNN: [14:12:05.682] 36  ConvAdd  581                            INT32     (96)            | 0x00073540 0x00073840 0x00000300
+D RKNN: [14:12:05.682] 37  ConvClip 583                            INT8      (576,96,1,1)    | 0x00073840 0x00081040 0x0000d800
+D RKNN: [14:12:05.682] 37  ConvClip 584                            INT32     (576)           | 0x00081040 0x00082240 0x00001200
+D RKNN: [14:12:05.682] 38  ConvClip 586                            INT8      (1,576,3,3)     | 0x00082240 0x00083680 0x00001440
+D RKNN: [14:12:05.682] 38  ConvClip 587                            INT32     (576)           | 0x00083680 0x00084880 0x00001200
+D RKNN: [14:12:05.682] 39  ConvAdd  589                            INT8      (96,576,1,1)    | 0x00084880 0x00092080 0x0000d800
+D RKNN: [14:12:05.682] 39  ConvAdd  590                            INT32     (96)            | 0x00092080 0x00092380 0x00000300
+D RKNN: [14:12:05.682] 40  ConvClip 592                            INT8      (576,96,1,1)    | 0x00092380 0x0009fb80 0x0000d800
+D RKNN: [14:12:05.682] 40  ConvClip 593                            INT32     (576)           | 0x0009fb80 0x000a0d80 0x00001200
+D RKNN: [14:12:05.682] 41  ConvClip 595                            INT8      (1,576,3,3)     | 0x000a0d80 0x000a21c0 0x00001440
+D RKNN: [14:12:05.682] 41  ConvClip 596                            INT32     (576)           | 0x000a21c0 0x000a33c0 0x00001200
+D RKNN: [14:12:05.682] 42  Conv     598                            INT8      (160,576,1,1)   | 0x000a33c0 0x000b9bc0 0x00016800
+D RKNN: [14:12:05.682] 42  Conv     599                            INT32     (160)           | 0x000b9bc0 0x000ba0c0 0x00000500
+D RKNN: [14:12:05.682] 43  ConvClip 601                            INT8      (960,160,1,1)   | 0x000ba0c0 0x000df8c0 0x00025800
+D RKNN: [14:12:05.682] 43  ConvClip 602                            INT32     (960)           | 0x000df8c0 0x000e16c0 0x00001e00
+D RKNN: [14:12:05.682] 44  ConvClip 604                            INT8      (1,960,3,3)     | 0x000e16c0 0x000e3880 0x000021c0
+D RKNN: [14:12:05.682] 44  ConvClip 605                            INT32     (960)           | 0x000e3880 0x000e5680 0x00001e00
+D RKNN: [14:12:05.682] 45  ConvAdd  607                            INT8      (160,960,1,1)   | 0x000e5680 0x0010ae80 0x00025800
+D RKNN: [14:12:05.682] 45  ConvAdd  608                            INT32     (160)           | 0x0010ae80 0x0010b380 0x00000500
+D RKNN: [14:12:05.682] 46  ConvClip 610                            INT8      (960,160,1,1)   | 0x0010b380 0x00130b80 0x00025800
+D RKNN: [14:12:05.682] 46  ConvClip 611                            INT32     (960)           | 0x00130b80 0x00132980 0x00001e00
+D RKNN: [14:12:05.682] 47  ConvClip 613                            INT8      (1,960,3,3)     | 0x00132980 0x00134b40 0x000021c0
+D RKNN: [14:12:05.682] 47  ConvClip 614                            INT32     (960)           | 0x00134b40 0x00136940 0x00001e00
+D RKNN: [14:12:05.682] 48  ConvAdd  616                            INT8      (160,960,1,1)   | 0x00136940 0x0015c140 0x00025800
+D RKNN: [14:12:05.682] 48  ConvAdd  617                            INT32     (160)           | 0x0015c140 0x0015c640 0x00000500
+D RKNN: [14:12:05.682] 49  ConvClip 619                            INT8      (960,160,1,1)   | 0x0015c640 0x00181e40 0x00025800
+D RKNN: [14:12:05.682] 49  ConvClip 620                            INT32     (960)           | 0x00181e40 0x00183c40 0x00001e00
+D RKNN: [14:12:05.682] 50  ConvClip 622                            INT8      (1,960,3,3)     | 0x00183c40 0x00185e00 0x000021c0
+D RKNN: [14:12:05.682] 50  ConvClip 623                            INT32     (960)           | 0x00185e00 0x00187c00 0x00001e00
+D RKNN: [14:12:05.682] 51  Conv     625                            INT8      (320,960,1,1)   | 0x00187c00 0x001d2c00 0x0004b000
+D RKNN: [14:12:05.682] 51  Conv     626                            INT32     (320)           | 0x001d2c00 0x001d3600 0x00000a00
+D RKNN: [14:I rknn building done.
+D adb path: /usr/bin/adb
+adb: unable to connect for root: closed
+I target set by user is: rk3588
+D adb path: /usr/bin/adb
+I Get hardware info: target_platform = rk3588, os = Linux, aarch = aarch64
+I Check RK3588 board npu runtime version
+I Starting ntp or adb, target is RK3588
+I Start adb...
+I Connect to Device success!
+I Flag perf_debug has been set, it will affect the performance of inference!
+I Flag eval_mem has been set, it will affect the performance of inference!
+12:05.682] 52  ConvClip 628                            INT8      (1280,320,1,1)  | 0x001d3600 0x00237600 0x00064000
+D RKNN: [14:12:05.682] 52  ConvClip 629                            INT32     (1280)          | 0x00237600 0x00239e00 0x00002800
+D RKNN: [14:12:05.682] 53  Conv     GlobalAveragePool_97_2conv0_i1 INT8      (1,1280,7,7)    | 0x00374600 0x00383b00 0x0000f500
+D RKNN: [14:12:05.682] 53  Conv     GlobalAveragePool_97_2conv0_i2 INT32     (1280)          | 0x00383b00 0x00386300 0x00002800
+D RKNN: [14:12:05.682] 54  Conv     classifier.1.weight            INT8      (1000,1280,1,1) | 0x0023be00 0x00374600 0x00138800
+D RKNN: [14:12:05.682] 54  Conv     classifier.1.bias              INT32     (1000)          | 0x00239e00 0x0023be00 0x00002000
+D RKNN: [14:12:05.682] 55  Reshape  output_mm_tp_rs_i1             INT64     (2)             | 0x00386300 0x00386310 0x00000010
+D RKNN: [14:12:05.682] ----------------------------------------------------------------------+---------------------------------
+D RKNN: [14:12:05.682] ----------------------------------------
+D RKNN: [14:12:05.682] Total Internal Memory Size: 1568KB
+D RKNN: [14:12:05.682] Total Weight Memory Size: 3610.81KB
+D RKNN: [14:12:05.682] ----------------------------------------
+D RKNN: [14:12:05.682] <<<<<<<< end: rknn::RKNNMemStatisticsPass
+I NPUTransfer(65229): Starting NPU Transfer Client, Transfer version 2.2.2 (12abf2a@2024-09-02T03:22:41)
+D NPUTransfer(65229): Transfer spec = local:transfer_proxy
+D NPUTransfer(65229): Transfer interface successfully opened, fd = 3
+I NPUTransfer(65229): TransferBuffer: min aligned size: 1024
+D RKNNAPI: ==============================================[0m
+D RKNNAPI: RKNN VERSION:[0m
+D RKNNAPI:   API: 2.3.2 (1842325 build@2025-03-30T09:55:23)[0m
+D RKNNAPI:   DRV: rknn_server: 2.3.2 (1842325 build@2025-03-30T09:54:34)[0m
+D RKNNAPI:   DRV: rknnrt: 2.3.2 (429f97ae6b@2025-04-09T09:09:27)[0m
+D RKNNAPI: ==============================================[0m
+D RKNNAPI: Input tensors:[0m
+D RKNNAPI:   index=0, name=input, n_dims=4, dims=[1, 224, 224, 3], n_elems=150528, size=150528, w_stride = 0, size_with_stride = 0, fmt=NHWC, type=INT8, qnt_type=AFFINE, zp=-14, scale=0.018658[0m
+D RKNNAPI: Output tensors:[0m
+D RKNNAPI:   index=0, name=output, n_dims=2, dims=[1, 1000], n_elems=1000, size=1000, w_stride = 0, size_with_stride = 0, fmt=UNDEFINED, type=INT8, qnt_type=AFFINE, zp=-55, scale=0.141923[0m
+step 5. 导出rknn模型文件
+读取一个输入图片
+step 6. 初始化运行时环境
+step 6.2: 性能评估
+CPU Current Frequency List:
+    - 1008000
+    - 408000
+    - 408000
+NPU Current Frequency List:
+    - 1000000000
+DDR Current Frequency List:
+    - 528000000
+
+[1;33mWarning: The performance result is just for debugging, may worse than actual performance![0m
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+                                                                          Network Layer Information Table                                                                                
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ID   OpType             DataType Target InputShape                               OutputShape            Cycles(DDR/NPU/Total)    Time(us)     MacUsage(%)          WorkLoad(0/1/2)      RW(KB)       FullName        
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+1    InputOperator      UINT8    CPU    \                                        (1,3,224,224)          0/0/0                    19                                0.0%/0.0%/0.0%       0            InputOperator:input
+2    ConvClip           UINT8    NPU    (1,3,224,224),(32,3,3,3),(32)            (1,32,112,112)         94150/112896/112896      254          4.17/0.00/0.00       100.0%/0.0%/0.0%     151          Conv:Conv_0     
+3    ConvClip           INT8     NPU    (1,32,112,112),(1,32,3,3),(32)           (1,32,112,112)         135884/112896/135884     347          1.02/0.00/0.00       100.0%/0.0%/0.0%     392          Conv:Conv_2     
+4    Conv               INT8     NPU    (1,32,112,112),(16,32,1,1),(16)          (1,16,112,112)         101942/50176/101942      177          3.54/0.00/0.00       100.0%/0.0%/0.0%     392          Conv:Conv_4     
+5    ConvClip           INT8     NPU    (1,16,112,112),(96,16,1,1),(96)          (1,96,112,112)         237950/150528/237950     336          5.60/0.00/0.00       100.0%/0.0%/0.0%     198          Conv:Conv_5     
+6    ConvClip           INT8     NPU    (1,96,112,112),(1,96,3,3),(96)           (1,96,56,56)           254848/56448/254848      271          0.98/0.00/0.00       100.0%/0.0%/0.0%     1177         Conv:Conv_7     
+7    Conv               INT8     NPU    (1,96,56,56),(24,96,1,1),(24)            (1,24,56,56)           68308/12544/68308        97           7.27/0.00/0.00       100.0%/0.0%/0.0%     296          Conv:Conv_9     
+8    ConvClip           INT8     NPU    (1,24,56,56),(144,24,1,1),(144)          (1,144,56,56)          94128/62720/94128        151          7.01/0.00/0.00       100.0%/0.0%/0.0%     102          Conv:Conv_10    
+9    ConvClip           INT8     NPU    (1,144,56,56),(1,144,3,3),(144)          (1,144,56,56)          153196/84672/153196      235          1.69/0.00/0.00       100.0%/0.0%/0.0%     443          Conv:Conv_12    
+10   ConvAdd            INT8     NPU    (1,144,56,56),(24,144,1,1),(24),...      (1,24,56,56)           110924/15680/110924      128          8.27/0.00/0.00       100.0%/0.0%/0.0%     542          Conv:Conv_14_ConvAdd
+11   ConvClip           INT8     NPU    (1,24,56,56),(144,24,1,1),(144)          (1,144,56,56)          94128/62720/94128        151          7.01/0.00/0.00       100.0%/0.0%/0.0%     102          Conv:Conv_16    
+12   ConvClip           INT8     NPU    (1,144,56,56),(1,144,3,3),(144)          (1,144,28,28)          95927/21168/95927        133          0.75/0.00/0.00       100.0%/0.0%/0.0%     443          Conv:Conv_18    
+13   Conv               INT8     NPU    (1,144,28,28),(32,144,1,1),(32)          (1,32,28,28)           24155/3920/24155         61           5.78/0.00/0.00       100.0%/0.0%/0.0%     115          Conv:Conv_20    
+14   ConvClip           INT8     NPU    (1,32,28,28),(192,32,1,1),(192)          (1,192,28,28)          30994/18816/30994        99           4.75/0.00/0.00       100.0%/0.0%/0.0%     32           Conv:Conv_21    
+15   ConvClip           INT8     NPU    (1,192,28,28),(1,192,3,3),(192)          (1,192,28,28)          51458/21168/51458        98           1.35/0.00/0.00       100.0%/0.0%/0.0%     150          Conv:Conv_23    
+16   ConvAdd            INT8     NPU    (1,192,28,28),(32,192,1,1),(32),...      (1,32,28,28)           35020/4704/35020         68           6.92/0.00/0.00       100.0%/0.0%/0.0%     177          Conv:Conv_25_ConvAdd
+17   ConvClip           INT8     NPU    (1,32,28,28),(192,32,1,1),(192)          (1,192,28,28)          30994/18816/30994        82           5.74/0.00/0.00       100.0%/0.0%/0.0%     32           Conv:Conv_27    
+18   ConvClip           INT8     NPU    (1,192,28,28),(1,192,3,3),(192)          (1,192,28,28)          51458/21168/51458        96           1.38/0.00/0.00       100.0%/0.0%/0.0%     150          Conv:Conv_29    
+19   ConvAdd            INT8     NPU    (1,192,28,28),(32,192,1,1),(32),...      (1,32,28,28)           35020/4704/35020         69           6.82/0.00/0.00       100.0%/0.0%/0.0%     177          Conv:Conv_31_ConvAdd
+20   ConvClip           INT8     NPU    (1,32,28,28),(192,32,1,1),(192)          (1,192,28,28)          30994/18816/30994        82           5.74/0.00/0.00       100.0%/0.0%/0.0%     32           Conv:Conv_33    
+21   ConvClip           INT8     NPU    (1,192,28,28),(1,192,3,3),(192)          (1,192,14,14)          32368/5616/32368         68           0.49/0.00/0.00       100.0%/0.0%/0.0%     150          Conv:Conv_35    
+22   Conv               INT8     NPU    (1,192,14,14),(64,192,1,1),(64)          (1,64,14,14)           10649/2496/10649         49           4.80/0.00/0.00       100.0%/0.0%/0.0%     49           Conv:Conv_37    
+23   ConvClip           INT8     NPU    (1,64,14,14),(384,64,1,1),(384)          (1,384,14,14)          19523/9984/19523         60           7.84/0.00/0.00       100.0%/0.0%/0.0%     39           Conv:Conv_38    
+24   ConvClip           INT8     NPU    (1,384,14,14),(1,384,3,3),(384)          (1,384,14,14)          26557/11232/26557        66           1.00/0.00/0.00       100.0%/0.0%/0.0%     79           Conv:Conv_40    
+25   ConvAdd            INT8     NPU    (1,384,14,14),(64,384,1,1),(64),...      (1,64,14,14)           21211/4992/21211         57           8.25/0.00/0.00       100.0%/0.0%/0.0%     110          Conv:Conv_42_ConvAdd
+26   ConvClip           INT8     NPU    (1,64,14,14),(384,64,1,1),(384)          (1,384,14,14)          19523/9984/19523         61           7.71/0.00/0.00       100.0%/0.0%/0.0%     39           Conv:Conv_44    
+27   ConvClip           INT8     NPU    (1,384,14,14),(1,384,3,3),(384)          (1,384,14,14)          26557/11232/26557        66           1.00/0.00/0.00       100.0%/0.0%/0.0%     79           Conv:Conv_46    
+28   ConvAdd            INT8     NPU    (1,384,14,14),(64,384,1,1),(64),...      (1,64,14,14)           21211/4992/21211         58           8.11/0.00/0.00       100.0%/0.0%/0.0%     110          Conv:Conv_48_ConvAdd
+29   ConvClip           INT8     NPU    (1,64,14,14),(384,64,1,1),(384)          (1,384,14,14)          19523/9984/19523         60           7.84/0.00/0.00       100.0%/0.0%/0.0%     39           Conv:Conv_50    
+30   ConvClip           INT8     NPU    (1,384,14,14),(1,384,3,3),(384)          (1,384,14,14)          26557/11232/26557        67           0.99/0.00/0.00       100.0%/0.0%/0.0%     79           Conv:Conv_52    
+31   ConvAdd            INT8     NPU    (1,384,14,14),(64,384,1,1),(64),...      (1,64,14,14)           21211/4992/21211         58           8.11/0.00/0.00       100.0%/0.0%/0.0%     110          Conv:Conv_54_ConvAdd
+32   ConvClip           INT8     NPU    (1,64,14,14),(384,64,1,1),(384)          (1,384,14,14)          19523/9984/19523         64           7.35/0.00/0.00       100.0%/0.0%/0.0%     39           Conv:Conv_56    
+33   ConvClip           INT8     NPU    (1,384,14,14),(1,384,3,3),(384)          (1,384,14,14)          26557/11232/26557        67           0.99/0.00/0.00       100.0%/0.0%/0.0%     79           Conv:Conv_58    
+34   Conv               INT8     NPU    (1,384,14,14),(96,384,1,1),(96)          (1,96,14,14)           22272/7488/22272         64           11.02/0.00/0.00      100.0%/0.0%/0.0%     110          Conv:Conv_60    
+35   ConvClip           INT8     NPU    (1,96,14,14),(576,96,1,1),(576)          (1,576,14,14)          32401/14976/32401        73           14.50/0.00/0.00      100.0%/0.0%/0.0%     76           Conv:Conv_61    
+36   ConvClip           INT8     NPU    (1,576,14,14),(1,576,3,3),(576)          (1,576,14,14)          39835/16848/39835        128          0.78/0.00/0.00       100.0%/0.0%/0.0%     119          Conv:Conv_63    
+37   ConvAdd            INT8     NPU    (1,576,14,14),(96,576,1,1),(96),...      (1,96,14,14)           34933/11232/34933        83           12.75/0.00/0.00      100.0%/0.0%/0.0%     183          Conv:Conv_65_ConvAdd
+38   ConvClip           INT8     NPU    (1,96,14,14),(576,96,1,1),(576)          (1,576,14,14)          32401/14976/32401        80           13.23/0.00/0.00      100.0%/0.0%/0.0%     76           Conv:Conv_67    
+39   ConvClip           INT8     NPU    (1,576,14,14),(1,576,3,3),(576)          (1,576,14,14)          39835/16848/39835        87           1.14/0.00/0.00       100.0%/0.0%/0.0%     119          Conv:Conv_69    
+40   ConvAdd            INT8     NPU    (1,576,14,14),(96,576,1,1),(96),...      (1,96,14,14)           34933/11232/34933        77           13.75/0.00/0.00      100.0%/0.0%/0.0%     183          Conv:Conv_71_ConvAdd
+41   ConvClip           INT8     NPU    (1,96,14,14),(576,96,1,1),(576)          (1,576,14,14)          32401/14976/32401        69           15.34/0.00/0.00      100.0%/0.0%/0.0%     76           Conv:Conv_73    
+42   ConvClip           INT8     NPU    (1,576,14,14),(1,576,3,3),(576)          (1,576,7,7)            25518/5184/25518         65           0.38/0.00/0.00       100.0%/0.0%/0.0%     119          Conv:Conv_75    
+43   Conv               INT8     NPU    (1,576,7,7),(160,576,1,1),(160)          (1,160,7,7)            21898/5760/21898         55           8.02/0.00/0.00       100.0%/0.0%/0.0%     118          Conv:Conv_77    
+44   ConvClip           INT8     NPU    (1,160,7,7),(960,160,1,1),(960)          (1,960,7,7)            36551/9600/36551         66           11.14/0.00/0.00      100.0%/0.0%/0.0%     165          Conv:Conv_78    
+45   ConvClip           INT8     NPU    (1,960,7,7),(1,960,3,3),(960)            (1,960,7,7)            18668/8640/18668         56           0.74/0.00/0.00       100.0%/0.0%/0.0%     61           Conv:Conv_80    
+46   ConvAdd            INT8     NPU    (1,960,7,7),(160,960,1,1),(160),...      (1,160,7,7)            36795/9600/36795         62           11.85/0.00/0.00      100.0%/0.0%/0.0%     204          Conv:Conv_82_ConvAdd
+47   ConvClip           INT8     NPU    (1,160,7,7),(960,160,1,1),(960)          (1,960,7,7)            36551/9600/36551         67           10.97/0.00/0.00      100.0%/0.0%/0.0%     165          Conv:Conv_84    
+48   ConvClip           INT8     NPU    (1,960,7,7),(1,960,3,3),(960)            (1,960,7,7)            18668/8640/18668         55           0.75/0.00/0.00       100.0%/0.0%/0.0%     61           Conv:Conv_86    
+49   ConvAdd            INT8     NPU    (1,960,7,7),(160,960,1,1),(160),...      (1,160,7,7)            36795/9600/36795         63           11.67/0.00/0.00      100.0%/0.0%/0.0%     204          Conv:Conv_88_ConvAdd
+50   ConvClip           INT8     NPU    (1,160,7,7),(960,160,1,1),(960)          (1,960,7,7)            36551/9600/36551         66           11.14/0.00/0.00      100.0%/0.0%/0.0%     165          Conv:Conv_90    
+51   ConvClip           INT8     NPU    (1,960,7,7),(1,960,3,3),(960)            (1,960,7,7)            18668/8640/18668         54           0.77/0.00/0.00       100.0%/0.0%/0.0%     61           Conv:Conv_92    
+52   Conv               INT8     NPU    (1,960,7,7),(320,960,1,1),(320)          (1,320,7,7)            62983/19200/62983        83           17.71/0.00/0.00      100.0%/0.0%/0.0%     348          Conv:Conv_94    
+53   ConvClip           INT8     NPU    (1,320,7,7),(1280,320,1,1),(1280)        (1,1280,7,7)           84248/25600/84248        106          18.49/0.00/0.00      100.0%/0.0%/0.0%     425          Conv:Conv_95    
+54   Conv               INT8     NPU    (1,1280,7,7),(1,1280,7,7),(1280)         (1,1280,1,1)           23159/15680/23159        66           0.09/0.00/0.00       100.0%/0.0%/0.0%     132          Conv:GlobalAveragePool_97_2conv0
+55   Conv               INT8     NPU    (1,1280,1,1),(1000,1280,1,1),(1000)      (1,1000,1,1)           218208/20480/218208      196          0.64/0.00/0.00       100.0%/0.0%/0.0%     1259         Conv:Gemm_104#2 
+56   Reshape            INT8     CPU    (1,1000,1,1),(2)                         (1,1000)               0/0/0                    46                                0.0%/0.0%/0.0%       1            Reshape:output_mm_tp_rs
+57   OutputOperator     INT8     CPU    (1,1000)                                 \                      0/0/0                    7                                 0.0%/0.0%/0.0%       0            OutputOperator:output
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Total Operator Elapsed Per Frame Time(us): 5529
+Total Memory Read/Write Per Frame Size(KB): 10562.98
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------
+                                 Operator Time Consuming Ranking Table            
+---------------------------------------------------------------------------------------------------
+OpType             CallNumber   CPUTime(us)  GPUTime(us)  NPUTime(us)  TotalTime(us)  TimeRatio(%)  
+---------------------------------------------------------------------------------------------------
+ConvClip           35           0            0            3886         3886           70.28%        
+Conv               9            0            0            848          848            15.34%        
+ConvAdd            10           0            0            723          723            13.08%        
+Reshape            1            46           0            0            46             0.83%         
+InputOperator      1            19           0            0            19             0.34%         
+OutputOperator     1            7            0            0            7              0.13%         
+---------------------------------------------------------------------------------------------------
+Total                           72           0            5457         5529          
+---------------------------------------------------------------------------------------------------
+
+step 6.3: 内存评估
+======================================================
+            Memory Profile Info Dump                  
+======================================================
+NPU model memory detail(bytes):
+    Weight Memory: 3.53 MiB
+    Internal Tensor Memory: 1.53 MiB
+    Other Memory: 373.19 KiB
+    Total Memory: 5.42 MiB
+
+INFO: When evaluating memory usage, we need consider  
+the size of model, current model size is: 3.97 MiB       
+======================================================
+
+[1;33mW[0m [1;33minference: The 'data_format' is not set, and its default value is 'nhwc'![0m
+step 7. 运行推理
+step 8. 后处理
+推理结果的 Top5 :
+[494] score=0.99 class="n03017168 chime, bell, gong"
+[653] score=0.00 class="n03764736 milk can"
+[505] score=0.00 class="n03063689 coffeepot"
+[469] score=0.00 class="n02939185 caldron, cauldron"
+[747] score=0.00 class="n04023962 punching bag, punch bag, punching ball, punchball"
+推理结果如上
+step 9. 精度评估
+I GraphPreparing :   0%|                                                    | 0/102 [00:00<?, ?it/s]I GraphPreparing : 100%|████████████████████████████████████████| 102/102 [00:00<00:00, 8088.08it/s]
+I AccuracyAnalysing :   0%|                                                 | 0/102 [00:00<?, ?it/s]I AccuracyAnalysing :   2%|▊                                        | 2/102 [00:00<00:10,  9.37it/s]I AccuracyAnalysing :   3%|█▏                                       | 3/102 [00:00<00:10,  9.43it/s]I AccuracyAnalysing :   4%|█▌                                       | 4/102 [00:00<00:10,  9.18it/s]I AccuracyAnalysing :   5%|██                                       | 5/102 [00:00<00:10,  9.36it/s]I AccuracyAnalysing :   7%|██▊                                      | 7/102 [00:00<00:15,  6.10it/s]I AccuracyAnalysing :   8%|███▏                                     | 8/102 [00:01<00:20,  4.70it/s]I AccuracyAnalysing :  10%|███▉                                    | 10/102 [00:01<00:14,  6.21it/s]I AccuracyAnalysing :  12%|████▋                                   | 12/102 [00:01<00:11,  7.61it/s]I AccuracyAnalysing :  13%|█████                                   | 13/102 [00:01<00:11,  7.62it/s]I AccuracyAnalysing :  14%|█████▍                                  | 14/102 [00:01<00:11,  7.44it/s]I AccuracyAnalysing :  15%|█████▉                                  | 15/102 [00:02<00:11,  7.52it/s]I AccuracyAnalysing :  18%|███████                                 | 18/102 [00:02<00:08, 10.29it/s]I AccuracyAnalysing :  20%|███████▊                                | 20/102 [00:02<00:07, 10.83it/s]I AccuracyAnalysing :  24%|█████████▍                              | 24/102 [00:02<00:05, 15.60it/s]I AccuracyAnalysing :  26%|██████████▌                             | 27/102 [00:02<00:04, 18.60it/s]I AccuracyAnalysing :  29%|███████████▊                            | 30/102 [00:02<00:03, 21.10it/s]I AccuracyAnalysing :  32%|████████████▉                           | 33/102 [00:02<00:02, 23.17it/s]I AccuracyAnalysing :  35%|██████████████                          | 36/102 [00:02<00:02, 24.54it/s]I AccuracyAnalysing :  41%|████████████████▍                       | 42/102 [00:03<00:01, 33.13it/s]I AccuracyAnalysing :  47%|██████████████████▊                     | 48/102 [00:03<00:01, 39.59it/s]I AccuracyAnalysing :  53%|█████████████████████▏                  | 54/102 [00:03<00:01, 43.90it/s]I AccuracyAnalysing :  59%|███████████████████████▌                | 60/102 [00:03<00:00, 46.22it/s]I AccuracyAnalysing :  64%|█████████████████████████▍              | 65/102 [00:03<00:00, 42.21it/s]I AccuracyAnalysing :  69%|███████████████████████████▍            | 70/102 [00:03<00:00, 41.55it/s]I AccuracyAnalysing :  74%|█████████████████████████████▍          | 75/102 [00:03<00:00, 41.23it/s]I AccuracyAnalysing :  80%|████████████████████████████████▏       | 82/102 [00:03<00:00, 47.39it/s]I AccuracyAnalysing :  90%|████████████████████████████████████    | 92/102 [00:04<00:00, 59.08it/s]I AccuracyAnalysing :  98%|██████████████████████████████████████▏| 100/102 [00:04<00:00, 62.79it/s]I AccuracyAnalysing : 100%|███████████████████████████████████████| 102/102 [00:04<00:00, 24.49it/s]
+I The error analysis results save to: ./snapshot/error_analysis.txt
+[1;33mW[0m [1;33maccuracy_analysis: The mapping of layer_name & file_name save to: ./snapshot/map_name_to_file.txt[0m
+
+# simulator_error: calculate the output error of each layer of the simulator (compared to the 'golden' value).
+#              entire: output error of each layer between 'golden' and 'simulator', these errors will accumulate layer by layer.
+#              single: single-layer output error between 'golden' and 'simulator', can better reflect the single-layer accuracy of the simulator.
+
+layer_name                              simulator_error                    
+                                    entire              single             
+                                 cos      euc        cos      euc          
+-----------------------------------------------------------------------
+[Input] input                  1.00000 | 0.0       1.00000 | 0.0           
+[exDataConvert] input_int8     0.99999 | 2.0815    0.99999 | 2.0815        
+[Conv] 474                     
+[Clip] 317                     0.99995 | 3.0455    0.99995 | 3.0455        
+[Conv] 477                     
+[Clip] 320                     0.99951 | 18.696    0.99954 | 18.145        
+[Conv] 480                     0.99836 | 24.715    0.99976 | 9.4394        
+[Conv] 483                     
+[Clip] 325                     0.99861 | 23.443    0.99978 | 9.4888        
+[Conv] 486                     
+[Clip] 328                     0.99813 | 15.536    0.99957 | 7.4565        
+[Conv] 489                     0.99712 | 16.303    0.99978 | 4.4839        
+[Conv] 492                     
+[Clip] 333                     0.99843 | 10.159    0.99991 | 2.4652        
+[Conv] 495                     
+[Clip] 336                     0.99633 | 18.657    0.99982 | 4.1694        
+[Conv] 498                     0.99333 | 22.772    0.99991 | 2.6708        
+[Add] 339                      0.99440 | 30.426    0.99983 | 5.2841        
+[Conv] 501                     
+[Clip] 342                     0.99616 | 14.966    0.99987 | 2.7856        
+[Conv] 504                     
+[Clip] 345                     0.99716 | 10.253    0.99992 | 1.7135        
+[Conv] 507                     0.99423 | 12.791    0.99986 | 2.0220        
+[Conv] 510                     
+[Clip] 350                     0.99771 | 5.4064    0.99994 | 0.8857        
+[Conv] 513                     
+[Clip] 353                     0.99493 | 7.8920    0.99979 | 1.6054        
+[Conv] 516                     0.99170 | 8.7136    0.99993 | 0.8092        
+[Add] 356                      0.99335 | 15.827    0.99988 | 2.1588        
+[Conv] 519                     
+[Clip] 359                     0.99730 | 5.4470    0.99994 | 0.8116        
+[Conv] 522                     
+[Clip] 362                     0.99453 | 7.6186    0.99983 | 1.3279        
+[Conv] 525                     0.98993 | 9.0851    0.99989 | 0.9533        
+[Add] 365                      0.99230 | 19.112    0.99985 | 2.6219        
+[Conv] 528                     
+[Clip] 368                     0.99598 | 7.5053    0.99989 | 1.2220        
+[Conv] 531                     
+[Clip] 371                     0.99772 | 5.1540    0.99994 | 0.7990        
+[Conv] 534                     0.99266 | 7.8182    0.99985 | 1.1057        
+[Conv] 537                     
+[Clip] 376                     0.99780 | 3.0359    0.99996 | 0.4217        
+[Conv] 540                     
+[Clip] 379                     0.99485 | 3.9091    0.99984 | 0.6913        
+[Conv] 543                     0.99488 | 3.7051    0.99993 | 0.4195        
+[Add] 382                      0.99296 | 8.8231    0.99990 | 1.0410        
+[Conv] 546                     
+[Clip] 385                     0.99748 | 2.6073    0.99994 | 0.4032        
+[Conv] 549                     
+[Clip] 388                     0.99486 | 3.7461    0.99985 | 0.6371        
+[Conv] 552                     0.99144 | 3.7727    0.99991 | 0.3765        
+[Add] 391                      0.99245 | 9.3048    0.99988 | 1.1957        
+[Conv] 555                     
+[Clip] 394                     0.99633 | 2.7066    0.99992 | 0.4094        
+[Conv] 558                     
+[Clip] 397                     0.99445 | 4.3173    0.99955 | 1.2236        
+[Conv] 561                     0.99159 | 4.0638    0.99943 | 1.0599        
+[Add] 400                      0.99077 | 10.113    0.99980 | 1.4674        
+[Conv] 564                     
+[Clip] 403                     0.99596 | 4.1438    0.99990 | 0.6642        
+[Conv] 567                     
+[Clip] 406                     0.99492 | 7.3036    0.99986 | 1.2192        
+[Conv] 570                     0.99071 | 8.3357    0.99980 | 1.2360        
+[Conv] 573                     
+[Clip] 411                     0.99547 | 3.8647    0.99987 | 0.6487        
+[Conv] 576                     
+[Clip] 414                     0.99293 | 5.9734    0.99944 | 1.6863        
+[Conv] 579                     0.98781 | 5.6386    0.99921 | 1.4356        
+[Add] 417                      0.99071 | 10.062    0.99978 | 1.5572        
+[Conv] 582                     
+[Clip] 420                     0.99432 | 3.9266    0.99938 | 1.2979        
+[Conv] 585                     
+[Clip] 423                     0.99326 | 6.1605    [1;33m0.99896[0m | 2.4253        
+[Conv] 588                     0.98592 | 6.9864    0.99907 | 1.7967        
+[Add] 426                      0.98957 | 12.483    0.99938 | 3.0355        
+[Conv] 591                     
+[Clip] 429                     0.99254 | 4.4883    0.99939 | 1.2824        
+[Conv] 594                     
+[Clip] 432                     0.99640 | 3.0716    0.99951 | 1.1279        
+[Conv] 597                     0.98648 | 3.1000    [1;33m0.99501[0m | 1.8901        
+[Conv] 600                     
+[Clip] 437                     0.99421 | 2.9986    [1;33m0.99782[0m | 1.8448        
+[Conv] 603                     
+[Clip] 440                     0.99110 | 3.8716    [1;33m0.99839[0m | 1.6436        
+[Conv] 606                     0.98469 | 2.7080    [1;33m0.99898[0m | 0.6966        
+[Add] 443                      0.98057 | 5.0745    [1;33m0.99093[0m | 3.4655        
+[Conv] 609                     
+[Clip] 446                     0.99188 | 3.2649    [1;33m0.99665[0m | 2.1009        
+[Conv] 612                     
+[Clip] 449                     0.98918 | 4.3610    [1;33m0.99860[0m | 1.5672        
+[Conv] 615                     0.97768 | 4.8407    [1;33m0.99873[0m | 1.1432        
+[Add] 452                      0.96674 | 9.1396    [1;33m0.98270[0m | 6.5884        
+[Conv] 618                     
+[Clip] 455                     0.98135 | 2.5540    [1;33m0.99127[0m | 1.7462        
+[Conv] 621                     
+[Clip] 458                     0.99203 | 4.3057    0.99942 | 1.1630        
+[Conv] 624                     0.97062 | 9.2436    0.99910 | 1.6225        
+[Conv] 627                     
+[Clip] 463                     0.97429 | 75.489    0.99990 | 4.6101        
+[Conv] 464                     0.99193 | 4.1182    0.99998 | 0.1981        
+[Conv] output_mm               0.99331 | 12.933    0.99992 | 1.4133        
+[Reshape] output_int8          0.99331 | 12.933    0.99993 | 1.3043        
+[exDataConvert] output         0.99331 | 12.933    0.99993 | 1.3043        
