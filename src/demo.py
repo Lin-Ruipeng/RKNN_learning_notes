@@ -98,6 +98,9 @@ def main():
         print("精度评估失败!")
         sys.exit(ret)
 
+    print("step 10. 释放模型")
+    rknn.release()
+
 
 if __name__ == "__main__":
     main()
